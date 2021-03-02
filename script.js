@@ -2,6 +2,7 @@
 
 // const results = document.getElementById("results");
 
+const passwordResult = document.getElementById("password"); // references 
 const passLength = document.getElementById("passLength"); // references the length of the number input
 const lowerButton = document.getElementById("lowerButton"); // references the checkbox input for lower characters
 const upperButton = document.getElementById("upperButton"); // references the checkbox input for upper characters
@@ -27,8 +28,60 @@ function writePassword() {
 
   passwordText.value = password; 
 
-  console.log(typeof lengthPass)
-}
+  console.log(lowerChecked, upperChecked, numberChecked, charChecked) //returns the checked boxes as 'true'
+  //ex: true true false false
+
+  passwordResult.innerText = createPassword(lowerChecked, upperChecked, numberChecked, charChecked, lengthPass) //
+};
+
+const allCharacterFunctions = {
+  lower: produceLower,
+  upper: produceUpper,
+  number: produceNumber,
+  symbol: produceSpecialCase,
+} // a dictionary containing the four functions to gather characters
+
+
+
+function createPassword(produceLower, produceUpper, produceNumber, produceSpecialCase, passLength) {
+
+  let passwordString = '';
+  const totalTypes = produceLower + produceUpper + produceNumber + produceSpecialCase;
+
+  console.log('totalTypes: ', totalTypes); // logs the total number of checked (i.e. true) boxes and produces a total
+
+  var checkedOff = true;
+
+  const totalTypesList = [{produceLower}, {produceUpper}, {produceNumber}, {produceSpecialCase}].filter(
+    item => Object.values(item)[0]); // shortens the array by removing false booleans 
+
+    console.log('totalTypesList: ', totalTypesList); // logs these 'true' values in an ordered array.
+
+    if (totalTypes === 0) {
+      return ''; 
+    } // in the case that no boxes are checked
+
+    for (let i = 0; i < passLength; i += typesCount) {
+      totalTypesList.forEach(type => {
+        const funcName = Object.keys(type)[0];
+
+        console.log('funcName: ', funcName);
+
+        passwordString += allCharacterFunctions[funcName](); //code comes from Traversy Media
+      });
+    }
+
+  // for (i = 0 ; i < totalTypesList.length ; i++) {
+  //   if (i === checkedOff) {
+  //     console.log(totalTypesList[i]);
+  //   } 
+  // }
+
+  };
+
+
+// Using Math.floor, Math.random, and String.fromCharCode, we can reference the ASCII/UTF characters
+//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String
 
 // UTF #33 to #47 and #58 to 64 = characters - function that returns a random character
 function produceSpecialCase() {
