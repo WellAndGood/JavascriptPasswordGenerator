@@ -52,8 +52,6 @@ function writePassword() {
   var numberChecked = numberButton.checked; //etc.
   var charChecked = characterButton.checked; //etc.
 
-  //console.log(lowerChecked, upperChecked, numberChecked, charChecked) //returns the checked boxes as 'true', ex: true true false false
-
   if (upperChecked) {
     passwordCharTypes.push(produceUpper)
   }
@@ -66,7 +64,6 @@ function writePassword() {
   if (charChecked) {
     passwordCharTypes.push(produceSpecialCase)
   }
-  //console.log(passwordCharTypes)
 
   var initialPasswordText = "";
   var finalPasswordText = ""
@@ -75,55 +72,68 @@ function writePassword() {
   }
   if (passwordCharTypes != []) {
 
-    //console.log("minimum number of characters is " + passwordLength.min)
-    var minimumPassLength = passwordLength.min // set at 8 (as per project requirements)
-    //console.log(minimumPassLength, "minimum of ")
-    for (i = 1 ; i < minimumPassLength ; i) {
+    //var minimumPassLength = passwordLength.min 
+    // set at 10 (8 as per project requirements, but extra as the below for loop sometimes cuts off prematuraly at 8, and creates a string shorter than 8)
+    
+    console.log("Password length requested: " + passwordLength.value)
+
+    if (passwordLength.value < 8) {
+      console.log("Please enter a number of at least 8.")
+      cardBody.innerText = "Please enter a number of at least 8."
+    } else if (passwordLength.value > 128) {
+      console.log("Please enter a number no greater than 128.")
+      cardBody.innerText = "Please enter a number no greater than 128."
+    }
+
+    for (i = 1 ; i < 10 ; i++) {
       if (passwordCharTypes[0]){
-        //console.log(passwordCharTypes[0]())
         let character = passwordCharTypes[0]()
-        //console.log(finalPasswordText + character)
         finalPasswordText += character;
-        i++
       }
       if (passwordCharTypes[1]) {
-        //console.log(passwordCharTypes[1]())
         let character = passwordCharTypes[1]()
-        //console.log(finalPasswordText + character)
         finalPasswordText += character;
-        i++
       }
       if (passwordCharTypes[2]){
-        //console.log(passwordCharTypes[2]())
         let character = passwordCharTypes[2]()
-        //console.log(finalPasswordText + character)
         finalPasswordText += character;
-        i++
       }
       if (passwordCharTypes[3]) {
-        //console.log(passwordCharTypes[3]())
         let character = passwordCharTypes[3]()
-        //console.log(finalPasswordText + character)
         finalPasswordText += character;
-        i++
       }
     }
 
-    //console.log(finalPasswordText)
+    var finalPasswordText = finalPasswordText.slice(0,8)
+
+    // console.log(finalPasswordText) // should log the first 8 characters of any password, even if longer.
 
     if (passwordLength.value > 8) {
       for (i = 8; i < passwordLength.value; i++) {
-        //console.log(i)
         var arrayLength = passwordCharTypes.length
-        var randomizer = Math.floor(Math.random() * arrayLength)
-        var randomInput = passwordCharTypes[randomizer]()
-        finalPasswordText += randomInput
-        //console.log(randomInput)
+        if (arrayLength > 0) {
+          var randomizer = Math.floor(Math.random() * arrayLength)
+          var randomInput = passwordCharTypes[randomizer]()
+          finalPasswordText += randomInput
+        }
       }
     }
 
-    console.log(finalPasswordText);
+    console.log("The original string is: " + finalPasswordText + " and is " + finalPasswordText.length + " characters long."); 
+
+    if (finalPasswordText.length > 128) {
+      var clippedContent = finalPasswordText.slice(128, finalPasswordText.length)
+      var finalPasswordText = finalPasswordText.slice(0, 128)
+      console.log("The following content was excluded due to exceeding 128 characters: " + clippedContent)
+    }
+
+    console.log("The final string is " + finalPasswordText.length + " characters long.");
     cardBody.innerText = finalPasswordText;
   
+    if (passwordCharTypes.length < 1) {
+      cardBody.innerText = "Invalid entry. Please check one of the boxes below to select a character type. "
+    }
+  
+  console.log("===============")
   }
 }
