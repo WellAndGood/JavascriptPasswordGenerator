@@ -82,6 +82,10 @@ header {
   clear: both;
 }
 
+#password-Generator-Div {
+  display: none;
+}
+
 .btn {
   border: none;
   background-color: hsl(360, 91%, 36%);
