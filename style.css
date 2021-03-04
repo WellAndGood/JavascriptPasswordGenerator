@@ -59,6 +59,9 @@ header {
 
 .card-body {
   min-height: 100px;
+  padding: 20px;
+  float: center;
+  overflow-wrap: break-word;
 }
 
 .card-footer {
