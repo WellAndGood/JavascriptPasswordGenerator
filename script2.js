@@ -43,7 +43,6 @@ getStarted.addEventListener("click", function() {
   getStarted.style.display = "none";
 })
 
-
 // Assignment Code // #generate associated to the Password Generator button
 var generateBtn = document.querySelector("#generate");
 
@@ -80,7 +79,6 @@ function writePassword() {
   }
   if (passwordCharTypes != []) {
 
-    
     console.log("Password length requested: " + passwordLength.value)
 
     // If/else if perform hard blocks if password length is < 8 or > 128. 
@@ -119,8 +117,6 @@ function writePassword() {
         }
     
         var finalPasswordText = finalPasswordText.slice(0,8)
-    
-        //
 
         if (passwordLength.value > 8) {
           for (i = 8; i < passwordLength.value; i++) {
@@ -135,13 +131,6 @@ function writePassword() {
     
         console.log("The original string is: " + finalPasswordText + " and is " + finalPasswordText.length + " characters long."); 
     
-        // This code works only if the hard-blocking "if else" statements are not in place.
-        // if (finalPasswordText.length > 128) {
-        //   var clippedContent = finalPasswordText.slice(128, finalPasswordText.length)
-        //   var finalPasswordText = finalPasswordText.slice(0, 128)
-        //   console.log("The following content was excluded due to exceeding 128 characters: " + clippedContent)
-        }
-    
         console.log("The final string is " + finalPasswordText.length + " characters long.");
         cardBody.innerText = finalPasswordText;
       
@@ -149,7 +138,6 @@ function writePassword() {
           cardBody.innerText = "Invalid entry. Please check one of the boxes below to select at least one character type. "
         }
     }
-  
   console.log("===============")
   
 }
