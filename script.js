@@ -1,15 +1,47 @@
-// DOM elements
+// Functions to return random characters
 
-// const results = document.getElementById("results");
+// UTF #33 to #47
+function produceSpecialCase() { 
+    var specialCase = String.fromCharCode(Math.floor(Math.random() * 15 + 33))
+    return specialCase
+  } 
+  
+  // UTF #48 to #57
+  function produceNumber() {  
+    var charCase = String.fromCharCode(Math.floor(Math.random() * 10 + 48))
+    return charCase
+  }
 
-const passwordResult = document.getElementById("password"); // references 
-const passLength = document.getElementById("passLength"); // references the length of the number input
-const lowerButton = document.getElementById("lowerButton"); // references the checkbox input for lower characters
-const upperButton = document.getElementById("upperButton"); // references the checkbox input for upper characters
-const numberButton = document.getElementById("numberButton"); // references the checkbox input for numbers
-const characterButton = document.getElementById("characterButton"); // references the checkbox input for characters
-const generate = document.getElementById("generate"); // selects the 'Generate password' button
+  // UTF #65 to #90
+  function produceUpper() {   
+    var upperCase = String.fromCharCode(Math.floor(Math.random() * 26 + 65))
+    return upperCase
+  }
+  
+  // UTF #97 to #122
+  function produceLower() { 
+    var lowerCase = String.fromCharCode(Math.floor(Math.random() * 26 + 97))
+    return lowerCase
+  }
 
+// Functions to create variables based on ID/DOM
+
+var finalPassword = document.getElementById("password")
+var cardBody = document.querySelector(".card-body")
+var passwordLength = document.getElementById("passLength")
+var generate = document.getElementById("generate")
+var lowerButton = document.getElementById("lowerButton")
+var upperButton = document.getElementById("upperButton")
+var numberButton = document.getElementById("numberButton")
+var characterButton = document.getElementById("characterButton")
+var getStarted = document.getElementById("get-started")
+var passwordGenerateDiv = document.getElementById("password-Generator-Div")
+
+// Makes Criteria Visible
+getStarted.addEventListener("click", function() {
+  passwordGenerateDiv.style.display = "block";
+  getStarted.style.display = "none";
+})
 
 // Assignment Code // #generate associated to the Password Generator button
 var generateBtn = document.querySelector("#generate");
@@ -20,126 +52,101 @@ generateBtn.addEventListener("click", writePassword);
 // Write password to the #password input
 function writePassword() {
   var passwordText = document.querySelector("#password"); //original code
+  var passwordCharTypes = [];
   var lengthPass = passLength.value; //my input; checks character length
   var upperChecked = upperButton.checked; //true if checked is selected
   var lowerChecked = lowerButton.checked; //false if checked is not selected
   var numberChecked = numberButton.checked; //etc.
   var charChecked = characterButton.checked; //etc.
 
-  passwordText.value = password; 
+  if (upperChecked) {
+    passwordCharTypes.push(produceUpper)
+  }
+  if (lowerChecked) {
+    passwordCharTypes.push(produceLower)
+  }
+  if (numberChecked) {
+    passwordCharTypes.push(produceNumber)
+  }
+  if (charChecked) {
+    passwordCharTypes.push(produceSpecialCase)
+  }
 
-  console.log(lowerChecked, upperChecked, numberChecked, charChecked) //returns the checked boxes as 'true'
-  //ex: true true false false
+  var initialPasswordText = "";
+  var finalPasswordText = ""
+  if (passwordCharTypes === []) {
+    return initialPasswordText
+  }
+  if (passwordCharTypes != []) {
 
-  passwordResult.innerText = createPassword(lowerChecked, upperChecked, numberChecked, charChecked, lengthPass) //
-};
+    console.log("Password length requested: " + passwordLength.value)
 
-const allCharacterFunctions = {
-  lower: produceLower,
-  upper: produceUpper,
-  number: produceNumber,
-  symbol: produceSpecialCase,
-} // a dictionary containing the four functions to gather characters
+    // If/else if perform hard blocks if password length is < 8 or > 128. 
+
+    if (passwordLength.value < 8) {
+
+      console.log("Please enter a number of at least 8.");
+      cardBody.innerText = "Please enter a number of at least 8."; // code not executing
+
+    } else if (passwordLength.value > 128) {
+
+      console.log("Please enter a number no greater than 128.");
+      cardBody.innerText = "Please enter a number no greater than 128."; // code not executing
+
+    } else if (passwordLength.value <= 128 || passwordLength.value >= 8) {
+        
+      // Creates a string longer than the initial 8 characters by looping through the "Accepted functions" array and guaranteeing all approved types of characters, then slices down to 8.
+  
+        for (i = 1 ; i < 10 ; i++) {
+          if (passwordCharTypes[0]){
+            let character = passwordCharTypes[0]()
+            finalPasswordText += character;
+          }
+          if (passwordCharTypes[1]) {
+            let character = passwordCharTypes[1]()
+            finalPasswordText += character;
+          }
+          if (passwordCharTypes[2]){
+            let character = passwordCharTypes[2]()
+            finalPasswordText += character;
+          }
+          if (passwordCharTypes[3]) {
+            let character = passwordCharTypes[3]()
+            finalPasswordText += character;
+          }
+        }
+    
+        var finalPasswordText = finalPasswordText.slice(0,8)
 
 
-
-function createPassword(produceLower, produceUpper, produceNumber, produceSpecialCase, passLength) {
-
-  let passwordString = '';
-  const totalTypes = produceLower + produceUpper + produceNumber + produceSpecialCase;
-
-  console.log('totalTypes: ', totalTypes); // logs the total number of checked (i.e. true) boxes and produces a total
-
-  var checkedOff = true;
-
-  const totalTypesList = [{produceLower}, {produceUpper}, {produceNumber}, {produceSpecialCase}].filter(
-    item => Object.values(item)[0]); // shortens the array by removing false booleans 
-
-    console.log('totalTypesList: ', totalTypesList); // logs these 'true' values in an ordered array.
-
-    if (totalTypes === 0) {
-      return ''; 
-    } // in the case that no boxes are checked
-
-    for (let i = 0; i < passLength; i += typesCount) {
-      totalTypesList.forEach(type => {
-        const funcName = Object.keys(type)[0];
-
-        console.log('funcName: ', funcName);
-
-        passwordString += allCharacterFunctions[funcName](); //code comes from Traversy Media
-      });
+        if (passwordLength.value > 8) {
+          for (i = 8; i < passwordLength.value; i++) {
+            var arrayLength = passwordCharTypes.length
+            if (arrayLength > 0) {
+              var randomizer = Math.floor(Math.random() * arrayLength)
+              var randomInput = passwordCharTypes[randomizer]()
+              finalPasswordText += randomInput
+            }
+          }
+        }
+    
+        console.log("The original string is: " + finalPasswordText + " and is " + finalPasswordText.length + " characters long."); 
+    
+        // This code works only if the hard-blocking "if else" statements are not in place.
+        // if (finalPasswordText.length > 128) {
+        //   var clippedContent = finalPasswordText.slice(128, finalPasswordText.length)
+        //   var finalPasswordText = finalPasswordText.slice(0, 128)
+        //   console.log("The following content was excluded due to exceeding 128 characters: " + clippedContent)
+        }
+    
+        console.log("The final string is " + finalPasswordText.length + " characters long.");
+        cardBody.innerText = finalPasswordText;
+      
+        if (passwordCharTypes.length < 1) {
+          cardBody.innerText = "Invalid entry. Please check one of the boxes below to select at least one character type. "
+        }
     }
-
-  // for (i = 0 ; i < totalTypesList.length ; i++) {
-  //   if (i === checkedOff) {
-  //     console.log(totalTypesList[i]);
-  //   } 
-  // }
-
-  };
-
-
-// Using Math.floor, Math.random, and String.fromCharCode, we can reference the ASCII/UTF characters
-//https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String
-
-// UTF #33 to #47 and #58 to 64 = characters - function that returns a random character
-function produceSpecialCase() {
-  return String.fromCharCode(Math.floor(Math.random() * 15 + 33))
+  
+  console.log("===============")
+  
 }
-
-// UTF #48 to #57 = digits - function that returns a random digit
-function produceNumber() {
-  return String.fromCharCode(Math.floor(Math.random() * 10 + 48))
-}
-
-// UTF #65 to #90 = uppercase characters - function that returns a random uppercase
-function produceUpper() {
-  return String.fromCharCode(Math.floor(Math.random() * 26 + 65))
-}
-
-// UTF #97 to #122 = lowercase characters - function that returns a random lowercase 
-function produceLower() {
-  return String.fromCharCode(Math.floor(Math.random() * 26 + 97))
-}
-
-// HTML Character Sets: https://www.w3schools.com/html/html_charset.asp
-// UTF #33 to #47 and #58 to 64 = characters
-// UTF #48 to #57 = digits
-// UTF #65 to #90 = uppercase characters
-// UTF #97 to #122 = lowercase characters
-
-// // console.log(String.fromCharCode(33)); // logs '!'
-// // console.log(String.fromCharCode(47)); // logs '/'
-
-// // console.log(String.fromCharCode(48)); // logs '0'
-// // console.log(String.fromCharCode(57)); // logs '9'
-
-// // console.log(String.fromCharCode(65)); // logs '!'
-// // console.log(String.fromCharCode(90)); // logs '/'
-
-// // console.log(String.fromCharCode(97)); // logs 'a'
-// // console.log(String.fromCharCode(122)); // logs 'z'
-
-// Math random: https://www.w3schools.com/js/js_random.asp
-// Use this to generate a random number between 0 and 1
-// Multiply by a number (X) to increase the range between 0 and X
-// Add a number to Math.floor to increase the minimum limit; the top number of the range acts as the upper limit.
-
-// // console.log(Math.random() * 100);
-// // console.log(Math.floor(Math.random() * 100 + 50));
-
-// Math floor: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/floor
-
-
-
-// Tests for the above functions
-// // console.log(produceLower());
-// // console.log(produceUpper());
-// // console.log(produceSpecialCase());
-// // console.log(produceNumber());
-
-
-
-
-
