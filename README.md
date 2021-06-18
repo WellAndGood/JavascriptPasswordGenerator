@@ -1,4 +1,4 @@
-# Javascript Password Generator - Bootcamp Spot Project #3
+# Javascript Password Generator
 
 ## Overview
 
