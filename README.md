@@ -9,6 +9,10 @@ This website is meant to demonstrate knowledge and competency in the following:
 - DOM elements,
 - Javascript arrays, conditionals, styling, and use of innerText
 
+## Why
+
+People have to provide passwords for a variety of services. It becomes hard to think of new ones. Why not use a randomizer to do it quickly and easily?
+
 # Features
 The following are the specific components and changes made to the original files
 
